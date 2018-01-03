@@ -19,7 +19,7 @@ public class Main extends Application
         stage.setMinHeight(500);
         stage.setMinWidth(700);
         stage.setMaxHeight(500);
-        stage.setMaxWidth(700);
+        stage.setMaxWidth(701);
         stage.show();
     }
 
