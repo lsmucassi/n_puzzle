@@ -5,6 +5,10 @@
  */
 package np;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -12,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
@@ -19,6 +24,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
 /**
  *
@@ -26,6 +32,9 @@ import javafx.scene.text.Text;
  */
 public class N_puzzle_Controller implements Initializable
 {
+
+    @FXML
+    private Button fileopener;
     @FXML
     private GridPane block;
 
@@ -62,12 +71,60 @@ public class N_puzzle_Controller implements Initializable
         int size = size(three, four, five, six, seven, eight);
         String heuristic  = get_heuristic(Manhattan, Misplaced_Tiles, blank);
         block.getChildren().clear();
-        block.setLayoutX(60);
-        block.setLayoutY(60);
+        block.setLayoutX(100);
+        block.setLayoutY(90);
         block.setVgap(5);
         block.setHgap(5);
 
         Utils.play(block,size, heuristic);
+    }
+
+    @FXML
+    private void chooseFIle(ActionEvent event)
+    {
+        FileChooser choose = new FileChooser();
+        File map = choose.showOpenDialog(null);
+        BufferedReader rd;
+        FileReader fr;
+        try
+        {
+            rd = new BufferedReader(new FileReader(map));
+            String line;
+            while((line = rd.readLine()) != null)
+            {
+                System.out.println(line);
+            }
+        }
+        catch (IOException ex)
+        {
+            System.out.println("error in reading file");
+        }
+
+        System.out.println("wow");
+    }
+
+    @FXML
+    private void activate_button(ActionEvent event)
+    {
+        fileopener.setDisable(false);;
+        three.setDisable(true);
+        four.setDisable(true);
+        five.setDisable(true);;
+        six.setDisable(true);;
+        seven.setDisable(true);;
+        eight.setDisable(true);;
+    }
+
+    @FXML
+    private void activate_puzzles(ActionEvent event)
+    {
+        fileopener.setDisable(true);
+        three.setDisable(false);
+        four.setDisable(false);
+        five.setDisable(false);;
+        six.setDisable(false);;
+        seven.setDisable(false);;
+        eight.setDisable(false);;
     }
 
     private int size(RadioButton b3, RadioButton b4, RadioButton b5, RadioButton b6, RadioButton b7, RadioButton b8)

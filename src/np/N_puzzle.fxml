@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
@@ -8,31 +12,43 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="np.N_puzzle_Controller">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="np.N_puzzle_Controller">
     <children>
-        <Button fx:id="button" layoutX="500" layoutY="400" onAction="#play_game" text="START!" />    
+        <Button fx:id="button" layoutX="590.0" layoutY="530.0" onAction="#play_game" text="START!" />    
         <GridPane fx:id="block" />
         <Separator fx:id="line" />
-        <Label layoutX="444.0" layoutY="92.0" text="Heuristic: " />
-        <Label layoutX="437.0" layoutY="192.0" text="Puzzle size: " />
+        <Label layoutX="530.0" layoutY="92.0" text="Heuristic: " />
       <Separator orientation="VERTICAL" prefHeight="200.0" />
-      <Separator layoutX="417.0" layoutY="41.0" orientation="VERTICAL" prefHeight="364.0" prefWidth="20.0" />
-      <RadioButton id="Manhattan" fx:id="Manhattan" layoutX="508.0" layoutY="109.0" mnemonicParsing="false" selected="true" text="Manhattan">
+      <Separator layoutX="491.0" layoutY="97.0" orientation="VERTICAL" prefHeight="424.0" prefWidth="20.0" />
+      <RadioButton id="Manhattan" fx:id="Manhattan" layoutX="660.0" layoutY="109.0" mnemonicParsing="false" selected="true" text="Manhattan">
          <toggleGroup>
             <ToggleGroup fx:id="heuristic" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton id="Misplaced_Tiles" fx:id="Misplaced_Tiles" layoutX="508.0" layoutY="133.0" mnemonicParsing="false" text="Misplaced-Tiles" toggleGroup="$heuristic" />
-      <RadioButton id="blank" fx:id="blank" layoutX="508.0" layoutY="162.0" mnemonicParsing="false" text="blank" toggleGroup="$heuristic" />
-      <RadioButton id="three" fx:id="three" layoutX="508.0" layoutY="205.0" mnemonicParsing="false" selected="true" text="3-puzzle">
+      <RadioButton id="Misplaced_Tiles" fx:id="Misplaced_Tiles" layoutX="660.0" layoutY="141.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="139.0" text="Misplaced-Tiles" toggleGroup="$heuristic" />
+      <RadioButton id="blank" fx:id="blank" layoutX="660.0" layoutY="173.0" mnemonicParsing="false" text="blank" toggleGroup="$heuristic" />
+      <RadioButton id="three" fx:id="three" layoutX="660.0" layoutY="330.0" mnemonicParsing="false" selected="true" text="3-puzzle">
          <toggleGroup>
             <ToggleGroup fx:id="grid" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton id="four" fx:id="four" layoutX="508.0" layoutY="235.0" mnemonicParsing="false" text="4-puzzle" toggleGroup="$grid" />
-      <RadioButton id="five" fx:id="five" layoutX="508.0" layoutY="266.0" mnemonicParsing="false" text="5-puzzle" toggleGroup="$grid" />
-      <RadioButton id="six" fx:id="six" layoutX="508.0" layoutY="295.0" mnemonicParsing="false" text="6-puzzle" toggleGroup="$grid" />
-      <RadioButton id="sevene" fx:id="seven" layoutX="509.0" layoutY="322.0" mnemonicParsing="false" text="7-puzzle" toggleGroup="$grid" />
-      <RadioButton id="eight" fx:id="eight" layoutX="508.0" layoutY="352.0" mnemonicParsing="false" text="8-puzzle" toggleGroup="$grid" />
+      <RadioButton id="four" fx:id="four" layoutX="660.0" layoutY="360.0" mnemonicParsing="false" text="4-puzzle" toggleGroup="$grid" />
+      <RadioButton id="five" fx:id="five" layoutX="660.0" layoutY="390.0" mnemonicParsing="false" text="5-puzzle" toggleGroup="$grid" />
+      <RadioButton id="six" fx:id="six" layoutX="660.0" layoutY="420.0" mnemonicParsing="false" text="6-puzzle" toggleGroup="$grid" />
+      <RadioButton id="seven" fx:id="seven" layoutX="660.0" layoutY="450.0" mnemonicParsing="false" text="7-puzzle" toggleGroup="$grid" />
+      <RadioButton id="eight" fx:id="eight" layoutX="660.0" layoutY="480.0" mnemonicParsing="false" text="8-puzzle" toggleGroup="$grid" />
+      <Button id="fileopener" fx:id="fileopener" layoutX="660.0" layoutY="253.0" mnemonicParsing="false" onAction="#chooseFIle" text="select map" disable="true" />
+      <Label layoutX="310.0" layoutY="11.0" text="N-Puzzle">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="530.0" layoutY="300.0" text="Auto-generated map" />
+      <Label layoutX="530.0" layoutY="223.0" text="User specified map" />
+      <RadioButton layoutX="660.0" layoutY="300.0" mnemonicParsing="false" onAction="#activate_puzzles" selected="true">
+         <toggleGroup>
+            <ToggleGroup fx:id="map_selection" />
+         </toggleGroup></RadioButton>
+      <RadioButton layoutX="660.0" layoutY="223.0" mnemonicParsing="false" onAction="#activate_button" toggleGroup="$map_selection" />
    </children>
 </AnchorPane>
