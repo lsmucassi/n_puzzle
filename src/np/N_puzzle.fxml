@@ -37,7 +37,7 @@
       <RadioButton id="six" fx:id="six" layoutX="660.0" layoutY="420.0" mnemonicParsing="false" text="6-puzzle" toggleGroup="$grid" />
       <RadioButton id="seven" fx:id="seven" layoutX="660.0" layoutY="450.0" mnemonicParsing="false" text="7-puzzle" toggleGroup="$grid" />
       <RadioButton id="eight" fx:id="eight" layoutX="660.0" layoutY="480.0" mnemonicParsing="false" text="8-puzzle" toggleGroup="$grid" />
-      <Button id="fileopener" fx:id="fileopener" layoutX="660.0" layoutY="253.0" mnemonicParsing="false" onAction="#chooseFIle" text="select map" disable="true" />
+      <Button id="fileopener" fx:id="fileopener" disable="true" layoutX="660.0" layoutY="253.0" mnemonicParsing="false" onAction="#chooseFIle" text="select map" />
       <Label layoutX="310.0" layoutY="11.0" text="N-Puzzle">
          <font>
             <Font size="48.0" />
@@ -50,5 +50,7 @@
             <ToggleGroup fx:id="map_selection" />
          </toggleGroup></RadioButton>
       <RadioButton layoutX="660.0" layoutY="223.0" mnemonicParsing="false" onAction="#activate_button" toggleGroup="$map_selection" />
+      <TextField id="filename" fx:id="filename" disable="true" layoutX="526.0" layoutY="253.0" prefHeight="27.0" prefWidth="128.0" text="..." />
+      <Label fx:id="unsolvable" layoutX="227.0" layoutY="481.0" text="Map generated is unsolvable." textFill="#ff2200" visible="false" />
    </children>
 </AnchorPane>

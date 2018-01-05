@@ -16,10 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -34,7 +31,14 @@ public class N_puzzle_Controller implements Initializable
 {
 
     @FXML
+    private Label unsolvable;
+
+    @FXML
+    private TextField filename;
+
+    @FXML
     private Button fileopener;
+
     @FXML
     private GridPane block;
 
@@ -68,27 +72,30 @@ public class N_puzzle_Controller implements Initializable
     @FXML
     private void play_game(ActionEvent event)
     {
-        int size = size(three, four, five, six, seven, eight);
+        int size = get_size(three, four, five, six, seven, eight);
         String heuristic  = get_heuristic(Manhattan, Misplaced_Tiles, blank);
-        block.getChildren().clear();
         block.setLayoutX(100);
         block.setLayoutY(90);
         block.setVgap(5);
         block.setHgap(5);
-
-        Utils.play(block,size, heuristic);
+        unsolvable.setVisible(false);
+        if (fileopener.isDisabled() == true)
+            Utils.map = null;
+        Utils.play(block, unsolvable, size, heuristic);
     }
 
     @FXML
     private void chooseFIle(ActionEvent event)
     {
         FileChooser choose = new FileChooser();
-        File map = choose.showOpenDialog(null);
+        Utils.map = choose.showOpenDialog(null);
+
         BufferedReader rd;
         FileReader fr;
         try
         {
-            rd = new BufferedReader(new FileReader(map));
+            filename.setText(Utils.map.getAbsolutePath().toString());
+            rd = new BufferedReader(new FileReader(Utils.map));
             String line;
             while((line = rd.readLine()) != null)
             {
@@ -99,14 +106,13 @@ public class N_puzzle_Controller implements Initializable
         {
             System.out.println("error in reading file");
         }
-
-        System.out.println("wow");
     }
 
     @FXML
     private void activate_button(ActionEvent event)
     {
-        fileopener.setDisable(false);;
+        fileopener.setDisable(false);
+        filename.setDisable(false);
         three.setDisable(true);
         four.setDisable(true);
         five.setDisable(true);;
@@ -119,6 +125,7 @@ public class N_puzzle_Controller implements Initializable
     private void activate_puzzles(ActionEvent event)
     {
         fileopener.setDisable(true);
+        filename.setDisable(true);
         three.setDisable(false);
         four.setDisable(false);
         five.setDisable(false);;
@@ -127,7 +134,7 @@ public class N_puzzle_Controller implements Initializable
         eight.setDisable(false);;
     }
 
-    private int size(RadioButton b3, RadioButton b4, RadioButton b5, RadioButton b6, RadioButton b7, RadioButton b8)
+    private int get_size(RadioButton b3, RadioButton b4, RadioButton b5, RadioButton b6, RadioButton b7, RadioButton b8)
     {
         if (b3.isSelected())
             return (3);

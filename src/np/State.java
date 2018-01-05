@@ -7,7 +7,7 @@ public class State
     private int[][] grid;
     private Point blank;
     private Point prev_blank;
-    private int heuristic_value, size;
+    private int heuristic_value, size, level;
     private String heuristic;
     
     private void initialise_grid()
@@ -34,6 +34,7 @@ public class State
     {
         this.size = size;
         heuristic_value = 0;
+        level = 0;
         grid = new int[size][];
         for (int i = 0; i < size; i++)
             grid[i] = new int[size];
@@ -44,8 +45,8 @@ public class State
     public State (State state, Point move)
     {
         this.size = state.get_size();
+        this.level = state.get_level() + 1;
         this.heuristic = state.get_heuristic();
-        this.heuristic_value = state.get_heuristic_value();
         this.blank = new Point(move.x, move.y);
         this.prev_blank = new Point(state.get_blank().x, state.get_blank().y);
         this.grid = new int[size][];
@@ -63,6 +64,16 @@ public class State
     public int get_heuristic_value()
     {
         return (heuristic_value);
+    }
+
+    public int get_level()
+    {
+        return (level);
+    }
+
+    public int get_fscore()
+    {
+        return (heuristic_value + level);
     }
     
     public String get_heuristic()
@@ -94,8 +105,12 @@ public class State
     {
         this.heuristic = heuristic;
     }
-     public void set_heuristic_value(int heuristic_value)
+
+     public void set_heuristic_value()
      {
-         this.heuristic_value = heuristic_value;
+         if (heuristic.equals("Manhattan"))
+             heuristic_value = Heuristics.Manhattan(this);
+         if (heuristic.equals("Misplaced-Tiles"))
+             heuristic_value = Heuristics.Misplaced_Tiles(this);
      }
 }
