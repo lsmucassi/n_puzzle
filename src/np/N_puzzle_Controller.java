@@ -40,6 +40,9 @@ public class N_puzzle_Controller implements Initializable
     private Button fileopener;
 
     @FXML
+    private Button start;
+
+    @FXML
     private GridPane block;
 
     @FXML
@@ -79,32 +82,22 @@ public class N_puzzle_Controller implements Initializable
         block.setVgap(5);
         block.setHgap(5);
         unsolvable.setVisible(false);
-        if (fileopener.isDisabled() == true)
-            Utils.map = null;
-        Utils.play(block, unsolvable, size, heuristic);
+
+        
+        GamePlay.play(unsolvable, size, heuristic);
     }
 
     @FXML
     private void chooseFIle(ActionEvent event)
     {
         FileChooser choose = new FileChooser();
-        Utils.map = choose.showOpenDialog(null);
-
-        BufferedReader rd;
-        FileReader fr;
-        try
+        GamePlay.map = choose.showOpenDialog(null);
+        if (GamePlay.map == null)
+            start.setDisable(true);
+        else
         {
-            filename.setText(Utils.map.getAbsolutePath().toString());
-            rd = new BufferedReader(new FileReader(Utils.map));
-            String line;
-            while((line = rd.readLine()) != null)
-            {
-                System.out.println(line);
-            }
-        }
-        catch (IOException ex)
-        {
-            System.out.println("error in reading file");
+            start.setDisable(false);
+            filename.setText(GamePlay.map.getAbsolutePath().toString());
         }
     }
 
@@ -115,15 +108,18 @@ public class N_puzzle_Controller implements Initializable
         filename.setDisable(false);
         three.setDisable(true);
         four.setDisable(true);
-        five.setDisable(true);;
-        six.setDisable(true);;
-        seven.setDisable(true);;
-        eight.setDisable(true);;
+        five.setDisable(true);
+        six.setDisable(true);
+        seven.setDisable(true);
+        eight.setDisable(true);
+        if (GamePlay.map == null)
+            start.setDisable(true);
     }
 
     @FXML
     private void activate_puzzles(ActionEvent event)
     {
+        start.setDisable(false);
         fileopener.setDisable(true);
         filename.setDisable(true);
         three.setDisable(false);
@@ -162,10 +158,10 @@ public class N_puzzle_Controller implements Initializable
 
     }
     
-    @Override
+   @Override
     public void initialize(URL url, ResourceBundle rb)
     {
         // TODO
-    }    
+    }
     
 }
