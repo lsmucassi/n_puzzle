@@ -43,16 +43,13 @@ public class State
         }
         this.grid[state.get_blank().y][state.get_blank().x] = this.grid[move.y][move.x];
         this.grid[move.y][move.x] = 0;
+        this.set_heuristic_value();
     }
 
     public State()
     {
-
         heuristic_value = 0;
         level = 0;
-        blank = new Point((int)Math.random()*size, (int)Math.random()*size);
-        prev_blank = new Point(blank.x, blank.y);
-
         BufferedReader br;
         try
         {
@@ -80,7 +77,14 @@ public class State
                         col = 0;
                         String[] items = line.split("\\s+");
                         for (String str : items)
+                        {
                             grid[row][col++] = Integer.parseInt(str);
+                            if (grid[row][col-1] == 0)
+                            {
+                                blank = new Point(col - 1, row);
+                                prev_blank = new Point(blank.x, blank.y);
+                            }
+                        }
                         row++;
                     }
                 }
@@ -91,6 +95,8 @@ public class State
         {
             System.out.println("Error in reading file");
         }
+        System.out.println("("+blank.x + ", " + blank.y + ")");
+
     }
 
     private void initialise_grid()
@@ -151,13 +157,16 @@ public class State
     public void set_heuristic(String heuristic)
     {
         this.heuristic = heuristic;
+        set_heuristic_value();
     }
 
-     public void set_heuristic_value()
+    public void set_heuristic_value()
      {
          if (heuristic.equals("Manhattan"))
              heuristic_value = Heuristics.Manhattan(this);
          if (heuristic.equals("Hamming-Distance"))
              heuristic_value = Heuristics.Hamming_Distance(this);
+         if (heuristic.equals("Manhattan-Hamming"))
+             heuristic_value = Heuristics.Manhattan_Hamming(this);
      }
 }

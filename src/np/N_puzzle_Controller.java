@@ -49,10 +49,10 @@ public class N_puzzle_Controller implements Initializable
     private RadioButton Manhattan;
 
     @FXML
-    private RadioButton Misplaced_Tiles;
+    private RadioButton Hamming;
 
     @FXML
-    private RadioButton blank;
+    private RadioButton Manhattan_Hamming;
 
     @FXML
     private RadioButton three;
@@ -75,16 +75,14 @@ public class N_puzzle_Controller implements Initializable
     @FXML
     private void play_game(ActionEvent event)
     {
-        int size = get_size(three, four, five, six, seven, eight);
-        String heuristic  = get_heuristic(Manhattan, Misplaced_Tiles, blank);
+        int size = get_size(three, four, five, six, seven);
+        String heuristic  = get_heuristic(Manhattan, Hamming, Manhattan_Hamming);
         block.setLayoutX(100);
         block.setLayoutY(90);
         block.setVgap(5);
         block.setHgap(5);
         unsolvable.setVisible(false);
-
-
-        GamePlay.play(unsolvable, size, heuristic);
+        GamePlay.play(size, heuristic);
     }
 
     @FXML
@@ -121,16 +119,18 @@ public class N_puzzle_Controller implements Initializable
     {
         start.setDisable(false);
         fileopener.setDisable(true);
+        filename.setText("...");
+        GamePlay.map = null;
         filename.setDisable(true);
         three.setDisable(false);
         four.setDisable(false);
-        five.setDisable(false);;
-        six.setDisable(false);;
-        seven.setDisable(false);;
-        eight.setDisable(false);;
+        five.setDisable(false);
+        six.setDisable(false);
+        seven.setDisable(false);
+        eight.setDisable(false);
     }
 
-    private int get_size(RadioButton b3, RadioButton b4, RadioButton b5, RadioButton b6, RadioButton b7, RadioButton b8)
+    private int get_size(RadioButton b3, RadioButton b4, RadioButton b5, RadioButton b6, RadioButton b7)
     {
         if (b3.isSelected())
             return (3);
@@ -146,16 +146,15 @@ public class N_puzzle_Controller implements Initializable
             return (8);
     }
 
-    private String get_heuristic(RadioButton manhattan, RadioButton misplaced, RadioButton linear)
+    private String get_heuristic(RadioButton manhattan, RadioButton hamming, RadioButton manhattan_hamming)
     {
 
         if (manhattan.isSelected())
             return (manhattan.getText());
-        else if (misplaced.isSelected())
-            return (misplaced.getText());
+        else if (hamming.isSelected())
+            return (hamming.getText());
         else
-            return (linear.getText());
-
+            return (manhattan_hamming.getText());
     }
     
    @Override

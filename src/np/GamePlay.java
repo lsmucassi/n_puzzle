@@ -1,38 +1,35 @@
 package np;
 
-import javafx.scene.control.Label;
-
-import javax.rmi.CORBA.Util;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class GamePlay
 {
-    public static int speed = 500;
-    public static ArrayList<State> all_moves = new ArrayList<>();
+    public static int speed = 500, space, time;
+    public static Stack<State> all_moves = new Stack<>();
     public static File map = null;
     public static boolean solvable;
 
 
-
-
-    public static void play(Label unsolvable, int size, String heuristic)
+    public static void play(int size, String heuristic)
     {
-        State goal_state, current_state;
-        if (map != null && MapUtils.is_map_valid())
-            current_state = new State();
+        State goal_state, current_state = null;
+        if (map != null)
+        {
+            if (MapUtils.is_map_valid())
+                current_state = new State();
+            else
+                MapUtils.map_err_exit(map.getAbsolutePath());
+        }
         else
             current_state = new State(size);
         goal_state = get_goal_state(current_state.get_size());
         current_state.set_heuristic(heuristic);
-        solvable = (MapUtils.isSolvable(current_state.get_grid(), current_state.get_size())) ? false : true;
-        unsolvable.setVisible(solvable ? false: true);
-
+        solvable = !MapUtils.isSolvable(current_state);
         if (solvable)
         {
-            Utils.print(current_state);
-            System.out.println("\ndid we? :" + solvable);
             IDA(current_state, goal_state);
             {
                /* Pane.getChildren().clear();
@@ -55,27 +52,34 @@ public class GamePlay
                         }
                     }
                 }*/
-                System.out.println("done : " + all_moves.size());
+                System.out.println("space complexity : " + space);
+                System.out.println("time complexity : " + time);
+                System.out.println("number of moves : " + (all_moves.size() - 1));
                 for (State p : all_moves) {
                     Utils.print(p);
                     System.out.println("\n\n");
                 }
             }
         }
+        else
+        {
+            System.out.println("This Map is unsolvable\n");
+            Utils.print(current_state);
+        }
+        System.exit(0);
     }
 
     private static void IDA(State start, State goal)
     {
-        int threshold, result, found = -1,round = 0;
+        int threshold, result, found = -1;
 
-        start.set_heuristic_value();
         threshold = start.get_fscore();
-
+        all_moves.push(start);
+        space = 1;
+        time = 0;
         while(true)
         {
-            all_moves.clear();
-            result = search(start, goal, threshold);
-            ++round;
+            result = search(goal, threshold);
 
             if(result == found)
                 break;
@@ -83,27 +87,44 @@ public class GamePlay
         }
 
     }
-    private static int search(State state, State goal, int threshold) {
+    private static int search(State goal, int threshold) {
 
-        state.set_heuristic_value();
-        all_moves.add(state);
-        if (state.get_fscore() > threshold) {
-            all_moves.remove(state);
+        State state = all_moves.peek();
+
+        if (state.get_fscore() > threshold)
             return state.get_fscore();
-        }
-        if (does_game_continue(state, goal) == false)
+
+        if (do_states_match(state, goal))
             return -1;
 
         int min = 2147483647;
         ArrayList<State> possible_moves = get_possible_states(state);
-        for (State move : possible_moves) {
-            int result = search(move, goal, threshold);
-            if(result == -1)
-                return (-1);
-            if(result < min)
-                min = result;
+        for (State move : possible_moves)
+        {
+            if (!is_inside(move))
+            {
+                all_moves.push(move);
+                space++;
+                int result = search(goal, threshold);
+                if (result == -1)
+                    return (-1);
+                if (result < min)
+                    min = result;
+                all_moves.pop();
+                time++;
+            }
         }
         return (min);
+    }
+
+    private static boolean is_inside(State move)
+    {
+        for (State state : all_moves)
+        {
+            if (do_states_match(state, move))
+                return (true);
+        }
+        return (false);
     }
 
     public static State get_goal_state(int size)
@@ -117,17 +138,17 @@ public class GamePlay
         return (state);
     }
 
-    private static boolean does_game_continue(State one, State two)
+    private static boolean do_states_match(State one, State two)
     {
         for (int i = 0; i < one.get_size(); i++)
         {
             for (int j = 0; j < one.get_size(); j++)
             {
                 if (one.get_grid()[i][j] != two.get_grid()[i][j])
-                    return (true);
+                    return (false);
             }
         }
-        return (false);
+        return (true);
     }
 
     private static ArrayList<State> get_possible_states(State state)

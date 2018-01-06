@@ -7,43 +7,37 @@ import java.util.ArrayList;
 
 public class MapUtils
 {
-    public static boolean isSolvable(int[][] grid, int size)
+    public static boolean isSolvable(State state)
     {
         int inversions = 0;
         ArrayList<Integer> numbers = new ArrayList<>();
-        for(int i = 0; i < size; i++)
+        for(int i = 0; i < state.get_size(); i++)
         {
-            for(int j = 0; j < size;j++)
-                numbers.add(grid[i][j]);
+            for(int j = 0; j < state.get_size(); j++)
+            {
+                if (state.get_grid()[i][j] != 0)
+                    numbers.add(state.get_grid()[i][j]);
+            }
         }
-        int row = 0;
-        int blankRow = 0;
         for (int i = 0; i < numbers.size(); i++)
         {
-            if (i % size == 0)
-                row++;
-            if (numbers.get(i) == 0)
-            {
-                blankRow = row;
-                continue;
-            }
             for (int j = i + 1; j < numbers.size(); j++)
             {
-                if (numbers.get(i) > numbers.get(j) && numbers.get(j) != 0)
+                if (numbers.get(i) > numbers.get(j))
                     inversions++;
             }
         }
-
-        if (size % 2 == 0)
+        System.out.println("inversions : " + inversions);
+        if (state.get_size() % 2 == 0)
         {
-            if (blankRow % 2 == 0)
+            if (state.get_blank().y % 2 == 0)
                 return (inversions % 2 == 0);
             else
                 return (inversions % 2 != 0);
-
         }
         else
             return (inversions% 2 == 0);
+
     }
 
     public static boolean is_map_valid()
@@ -144,7 +138,7 @@ public class MapUtils
         return (true);
     }
 
-    private static void map_err_exit(String filename)
+    public static void map_err_exit(String filename)
     {
         System.out.println("Invalid map discovered in file : " + filename);
         System.exit(0);
