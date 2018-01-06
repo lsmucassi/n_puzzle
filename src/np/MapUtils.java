@@ -81,6 +81,11 @@ public class MapUtils
                                 String[] items = line.split("\\s+");
                                 if (items.length != size)
                                     return (false);
+                                for (String str : items)
+                                {
+                                    if (isNumeric(str) == false)
+                                        return (false);
+                                }
                             }
                             else
                                 return (false);
@@ -89,16 +94,21 @@ public class MapUtils
                     else
                         return (false);
                 }
+                return (true);
             }
+            else
+                return (false);
         }
+
         catch (IOException ex)
         {
             System.out.println("Error in reading file");
+            System.exit(0);
         }
         return (true);
     }
 
-    private static boolean is_comment(String line)
+    public static boolean is_comment(String line)
     {
         String tmp = line.split("\\s+")[0];
         if (tmp.charAt(0)== '#')
@@ -107,24 +117,24 @@ public class MapUtils
             return false;
     }
 
-    private static boolean is_end_dollar(String line)
+    public static boolean is_end_dollar(String line)
     {
         if (line.charAt(line.length() -1) == '$')
             return  (true);
         return (false);
     }
 
-    private static  String cut_dollar_off(String line)
+    public static  String cut_dollar_off(String line)
     {
         return line.substring(0,line.length() - 1);
     }
 
-    private static  String cut_comment_off(String line)
+    public static  String cut_comment_off(String line)
     {
         return line.trim().split("#")[0];
     }
 
-    private static boolean isNumeric(String line)
+    public static boolean isNumeric(String line)
     {
         for (char c : line.toCharArray())
         {

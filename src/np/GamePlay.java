@@ -19,15 +19,20 @@ public class GamePlay
 
     public static void play(Label unsolvable, int size, String heuristic)
     {
-        State goal_state = get_goal_state(size), current_state = new State(size);
+        State goal_state, current_state;
+        if (map != null && MapUtils.is_map_valid())
+            current_state = new State();
+        else
+            current_state = new State(size);
+        goal_state = get_goal_state(current_state.get_size());
         current_state.set_heuristic(heuristic);
-        solvable = (MapUtils.isSolvable(current_state.get_grid(), size)) ? false : true;
+        solvable = (MapUtils.isSolvable(current_state.get_grid(), current_state.get_size())) ? false : true;
         unsolvable.setVisible(solvable ? false: true);
 
         if (solvable)
         {
             Utils.print(current_state);
-            System.out.println("\ndid we? :" +solvable);
+            System.out.println("\ndid we? :" + solvable);
             IDA(current_state, goal_state);
             {
                /* Pane.getChildren().clear();

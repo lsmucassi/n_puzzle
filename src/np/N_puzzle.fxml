@@ -25,7 +25,7 @@
             <ToggleGroup fx:id="heuristic" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton id="Misplaced_Tiles" fx:id="Misplaced_Tiles" layoutX="660.0" layoutY="141.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="139.0" text="Misplaced-Tiles" toggleGroup="$heuristic" />
+      <RadioButton id="Hamming" fx:id="Hamming" layoutX="660.0" layoutY="141.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="139.0" text="Hamming-Distance" toggleGroup="$heuristic" />
       <RadioButton id="blank" fx:id="blank" layoutX="660.0" layoutY="173.0" mnemonicParsing="false" text="blank" toggleGroup="$heuristic" />
       <RadioButton id="three" fx:id="three" layoutX="660.0" layoutY="330.0" mnemonicParsing="false" selected="true" text="3-puzzle">
          <toggleGroup>

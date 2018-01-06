@@ -25,7 +25,7 @@ public class Heuristics
         return (value);
     }
     
-    public static int Misplaced_Tiles(State game)
+    public static int Hamming_Distance(State game)
     {
         int value = 0;
         

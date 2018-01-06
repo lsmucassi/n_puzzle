@@ -1,6 +1,9 @@
 package np;
 
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class State
 {
@@ -9,26 +12,7 @@ public class State
     private Point prev_blank;
     private int heuristic_value, size, level;
     private String heuristic;
-    
-    private void initialise_grid()
-    {
-        int total = size * size;
-        int row, col;
-        
-        col = (int)(Math.random()*size);
-        row = (int)(Math.random()*size);
-        blank = new Point(col, row);
-        for (int num = 1; num < total; num++)
-        {
-            do
-            {
-                row = (int)(Math.random()*size);//generates a random number in range [0,size -1]
-                col = (int)(Math.random()*size);//generates a random number in range [0,size -1]
-            }
-            while ((col == blank.x && row == blank.y) || grid[row][col] != 0);   
-            grid[row][col] = num;
-        }
-    }
+
     
     public State(int size)
     {
@@ -60,10 +44,73 @@ public class State
         this.grid[state.get_blank().y][state.get_blank().x] = this.grid[move.y][move.x];
         this.grid[move.y][move.x] = 0;
     }
-    
-    public int get_heuristic_value()
+
+    public State()
     {
-        return (heuristic_value);
+
+        heuristic_value = 0;
+        level = 0;
+        blank = new Point((int)Math.random()*size, (int)Math.random()*size);
+        prev_blank = new Point(blank.x, blank.y);
+
+        BufferedReader br;
+        try
+        {
+            int row = 0;
+            int col;
+            if (GamePlay.map != null)
+            {
+                br = new BufferedReader(new FileReader(GamePlay.map));
+                String line;
+                while ((line = br.readLine()) != null)
+                {
+                    line = line.trim();
+                    if (MapUtils.is_comment(line))
+                        continue;
+
+                    line = MapUtils.cut_comment_off(MapUtils.cut_dollar_off(line));
+                    if (MapUtils.isNumeric(line)) {
+                        this.size = Integer.parseInt(line);
+                        grid = new int[size][];
+                        for (int i = 0; i < size; i++)
+                            grid[i] = new int[size];
+                    }
+                    else
+                    {
+                        col = 0;
+                        String[] items = line.split("\\s+");
+                        for (String str : items)
+                            grid[row][col++] = Integer.parseInt(str);
+                        row++;
+                    }
+                }
+            }
+        }
+
+        catch (IOException ex)
+        {
+            System.out.println("Error in reading file");
+        }
+    }
+
+    private void initialise_grid()
+    {
+        int total = size * size;
+        int row, col;
+
+        col = (int)(Math.random()*size);
+        row = (int)(Math.random()*size);
+        blank = new Point(col, row);
+        for (int num = 1; num < total; num++)
+        {
+            do
+            {
+                row = (int)(Math.random()*size);//generates a random number in range [0,size -1]
+                col = (int)(Math.random()*size);//generates a random number in range [0,size -1]
+            }
+            while ((col == blank.x && row == blank.y) || grid[row][col] != 0);
+            grid[row][col] = num;
+        }
     }
 
     public int get_level()
@@ -110,7 +157,7 @@ public class State
      {
          if (heuristic.equals("Manhattan"))
              heuristic_value = Heuristics.Manhattan(this);
-         if (heuristic.equals("Misplaced-Tiles"))
-             heuristic_value = Heuristics.Misplaced_Tiles(this);
+         if (heuristic.equals("Hamming-Distance"))
+             heuristic_value = Heuristics.Hamming_Distance(this);
      }
 }

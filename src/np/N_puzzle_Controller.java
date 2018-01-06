@@ -83,7 +83,7 @@ public class N_puzzle_Controller implements Initializable
         block.setHgap(5);
         unsolvable.setVisible(false);
 
-        
+
         GamePlay.play(unsolvable, size, heuristic);
     }
 
