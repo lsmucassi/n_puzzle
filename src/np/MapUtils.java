@@ -27,7 +27,6 @@ public class MapUtils
                     inversions++;
             }
         }
-        System.out.println("inversions : " + inversions);
         if (state.get_size() % 2 == 0)
         {
             if (state.get_blank().y % 2 == 0)

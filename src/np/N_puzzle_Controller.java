@@ -5,17 +5,11 @@
  */
 package np;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -23,13 +17,9 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
-/**
- *
- * @author budas
- */
+
 public class N_puzzle_Controller implements Initializable
 {
-
     @FXML
     private Label unsolvable;
 
@@ -77,12 +67,36 @@ public class N_puzzle_Controller implements Initializable
     {
         int size = get_size(three, four, five, six, seven);
         String heuristic  = get_heuristic(Manhattan, Hamming, Manhattan_Hamming);
-        block.setLayoutX(100);
-        block.setLayoutY(90);
-        block.setVgap(5);
-        block.setHgap(5);
         unsolvable.setVisible(false);
         GamePlay.play(size, heuristic);
+        for (State move : GamePlay.all_moves)
+        {
+            size = move.get_size();
+            block.setLayoutX(100);
+            block.setLayoutY(90);
+            block.setVgap(5);
+            block.setHgap(5);
+            block.getChildren().clear();
+            int block_size = Utils.get_block_size_spacing(size).y,  spaces = Utils.get_block_size_spacing(size).x;
+            for (int i = 0; i < move.get_size(); i++)
+            {
+                for (int j = 0; j < move.get_size(); j++)
+                {
+                    Text text = new Text("");
+                    String spacing = new String(new char[spaces]).replace('\0', ' ');
+                    text.setText(spacing + Integer.toString(move.get_grid()[i][j]));
+                    Rectangle rec = new Rectangle(block_size, block_size);
+                    if (move.get_grid()[i][j] ==0)
+                        rec.setFill(Color.TRANSPARENT);
+                    else
+                    {
+                        block.add(rec,j,i);
+                        block.add(text,j,i);
+                        rec.setFill(Color.AQUA);
+                    }
+                }
+            }
+        }
     }
 
     @FXML

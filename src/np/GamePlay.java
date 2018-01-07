@@ -3,11 +3,12 @@ package np;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Stack;
 
 public class GamePlay
 {
-    public static int speed = 500, space, time;
+    public static int speed = 3000, space, time;
     public static Stack<State> all_moves = new Stack<>();
     public static File map = null;
     public static boolean solvable;
@@ -30,35 +31,18 @@ public class GamePlay
         solvable = !MapUtils.isSolvable(current_state);
         if (solvable)
         {
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0L;
+            System.out.println("\u001B[32m" + "Searching for optimal sequence..." + "\u001B[0m" +"\n");
             IDA(current_state, goal_state);
-            {
-               /* Pane.getChildren().clear();
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j ..
-                    = 0; j < size; j++)
-                    {
-                        Text text = new Text("");
-                        String spacing = new String(new char[spaces]).replace('\0', ' ');
-                        text.setText(spacing + Integer.toString(current_state.get_grid()[i][j]));
-                        Rectangle rec = new Rectangle(block_size, block_size);
-                        if (current_state.get_grid()[i][j] ==0)
-                            rec.setFill(Color.TRANSPARENT);
-                        else
-                        {
-                            Pane.add(rec,j,i);
-                            Pane.add(text,j,i);
-                            rec.setFill(Color.AQUA);
-                        }
-                    }
-                }*/
-                System.out.println("space complexity : " + space);
-                System.out.println("time complexity : " + time);
-                System.out.println("number of moves : " + (all_moves.size() - 1));
-                for (State p : all_moves) {
-                    Utils.print(p);
-                    System.out.println("\n\n");
-                }
+            elapsedTime = (new Date()).getTime() - startTime;
+            System.out.println("\ntime in seconds : " + elapsedTime/1000.0);
+            System.out.println("space complexity : " + space);
+            System.out.println("time complexity : " + time);
+            System.out.println("number of moves : " + (all_moves.size() - 1));
+            for (State p : all_moves) {
+                System.out.println("\n");
+                Utils.print(p);
             }
         }
         else
@@ -66,7 +50,7 @@ public class GamePlay
             System.out.println("This Map is unsolvable\n");
             Utils.print(current_state);
         }
-        System.exit(0);
+        //System.exit(0);
     }
 
     private static void IDA(State start, State goal)
@@ -81,12 +65,13 @@ public class GamePlay
         {
             result = search(goal, threshold);
 
-            if(result == found)
+             if(result == found)
                 break;
             threshold = result;
         }
 
     }
+
     private static int search(State goal, int threshold) {
 
         State state = all_moves.peek();
@@ -101,7 +86,7 @@ public class GamePlay
         ArrayList<State> possible_moves = get_possible_states(state);
         for (State move : possible_moves)
         {
-            if (!is_inside(move))
+            if (!all_moves.contains(move))
             {
                 all_moves.push(move);
                 space++;
@@ -115,16 +100,6 @@ public class GamePlay
             }
         }
         return (min);
-    }
-
-    private static boolean is_inside(State move)
-    {
-        for (State state : all_moves)
-        {
-            if (do_states_match(state, move))
-                return (true);
-        }
-        return (false);
     }
 
     public static State get_goal_state(int size)

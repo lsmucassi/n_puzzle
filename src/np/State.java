@@ -95,8 +95,6 @@ public class State
         {
             System.out.println("Error in reading file");
         }
-        System.out.println("("+blank.x + ", " + blank.y + ")");
-
     }
 
     private void initialise_grid()
@@ -126,6 +124,7 @@ public class State
 
     public int get_fscore()
     {
+        this.set_heuristic_value();
         return (heuristic_value + level);
     }
     
@@ -160,7 +159,7 @@ public class State
         set_heuristic_value();
     }
 
-    public void set_heuristic_value()
+    private void set_heuristic_value()
      {
          if (heuristic.equals("Manhattan"))
              heuristic_value = Heuristics.Manhattan(this);
