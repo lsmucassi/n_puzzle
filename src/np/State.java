@@ -64,9 +64,9 @@ public class State
                     line = line.trim();
                     if (MapUtils.is_comment(line))
                         continue;
-
-                    line = MapUtils.cut_comment_off(MapUtils.cut_dollar_off(line));
-                    if (MapUtils.isNumeric(line)) {
+                    line = MapUtils.cut_comment_off(line);
+                    if (MapUtils.isNumeric(line))
+                    {
                         this.size = Integer.parseInt(line);
                         grid = new int[size][];
                         for (int i = 0; i < size; i++)

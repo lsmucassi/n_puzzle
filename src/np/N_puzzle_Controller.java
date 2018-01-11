@@ -20,6 +20,8 @@ import javafx.stage.FileChooser;
 
 public class N_puzzle_Controller implements Initializable
 {
+    int display_index;
+
     @FXML
     private Label unsolvable;
 
@@ -33,7 +35,13 @@ public class N_puzzle_Controller implements Initializable
     private Button start;
 
     @FXML
-    private GridPane block;
+    private Button next;
+
+    @FXML
+    private Button prev;
+
+    @FXML
+    private GridPane grid;
 
     @FXML
     private RadioButton Manhattan;
@@ -53,49 +61,28 @@ public class N_puzzle_Controller implements Initializable
     @FXML
     private RadioButton five;
 
-    @FXML
-    private RadioButton six;
-
-    @FXML
-    private RadioButton seven;
-
-    @FXML
-    private RadioButton eight;
 
     @FXML
     private void play_game(ActionEvent event)
     {
-        int size = get_size(three, four, five, six, seven);
+        prev.setVisible(false);
+        next.setVisible(false);
+        display_index = 0;
+        int size = get_size(three, four);
         String heuristic  = get_heuristic(Manhattan, Hamming, Manhattan_Hamming);
         unsolvable.setVisible(false);
-        GamePlay.play(size, heuristic);
-        for (State move : GamePlay.all_moves)
-        {
-            size = move.get_size();
-            block.setLayoutX(100);
-            block.setLayoutY(90);
-            block.setVgap(5);
-            block.setHgap(5);
-            block.getChildren().clear();
-            int block_size = Utils.get_block_size_spacing(size).y,  spaces = Utils.get_block_size_spacing(size).x;
-            for (int i = 0; i < move.get_size(); i++)
-            {
-                for (int j = 0; j < move.get_size(); j++)
-                {
-                    Text text = new Text("");
-                    String spacing = new String(new char[spaces]).replace('\0', ' ');
-                    text.setText(spacing + Integer.toString(move.get_grid()[i][j]));
-                    Rectangle rec = new Rectangle(block_size, block_size);
-                    if (move.get_grid()[i][j] ==0)
-                        rec.setFill(Color.TRANSPARENT);
-                    else
-                    {
-                        block.add(rec,j,i);
-                        block.add(text,j,i);
-                        rec.setFill(Color.AQUA);
-                    }
-                }
-            }
+        grid.setVisible(false);
+        GamePlay.play(size, heuristic, unsolvable, grid);
+        if (GamePlay.solvable) {
+            State move = GamePlay.all_moves.get(display_index++);
+            grid.setLayoutX(100);
+            grid.setLayoutY(90);
+            grid.setVgap(5);
+            grid.setHgap(5);
+            grid.getChildren().clear();
+            prev.setVisible(true);
+            next.setVisible(true);
+            draw_state(move);
         }
     }
 
@@ -121,9 +108,6 @@ public class N_puzzle_Controller implements Initializable
         three.setDisable(true);
         four.setDisable(true);
         five.setDisable(true);
-        six.setDisable(true);
-        seven.setDisable(true);
-        eight.setDisable(true);
         if (GamePlay.map == null)
             start.setDisable(true);
     }
@@ -139,25 +123,65 @@ public class N_puzzle_Controller implements Initializable
         three.setDisable(false);
         four.setDisable(false);
         five.setDisable(false);
-        six.setDisable(false);
-        seven.setDisable(false);
-        eight.setDisable(false);
     }
 
-    private int get_size(RadioButton b3, RadioButton b4, RadioButton b5, RadioButton b6, RadioButton b7)
+
+    @FXML
+    private void next_state(ActionEvent event)
+    {
+        if (display_index < GamePlay.all_moves.size())
+        {
+            State state = GamePlay.all_moves.get(display_index++);
+            draw_state(state);
+        }
+    }
+
+
+    @FXML
+    private void prev_state(ActionEvent event)
+    {
+        if (display_index - 1 > 0)
+        {
+            State state = GamePlay.all_moves.get(--display_index - 1);
+            draw_state(state);
+        }
+    }
+
+    private void draw_state(State state)
+    {
+
+        int size = state.get_size();
+        grid.setVisible(true);
+        grid.getChildren().clear();
+        int block = Utils.get_block_size_spacing(size).y,  spaces = Utils.get_block_size_spacing(size).x;
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                Text text = new Text("");
+                String spacing = new String(new char[spaces]).replace('\0', ' ');
+                text.setText(spacing + Integer.toString(state.get_grid()[i][j]));
+                Rectangle rec = new Rectangle(block, block);
+                if (state.get_grid()[i][j] ==0)
+                    rec.setFill(Color.TRANSPARENT);
+                else
+                {
+                    grid.add(rec,j,i);
+                    grid.add(text,j,i);
+                    rec.setFill(Color.AQUA);
+                }
+            }
+        }
+    }
+
+    private int get_size(RadioButton b3, RadioButton b4)
     {
         if (b3.isSelected())
             return (3);
         else if (b4.isSelected())
             return (4);
-        else if (b5.isSelected())
-            return (5);
-        else if (b6.isSelected())
-            return (6);
-        else if (b7.isSelected())
-            return (7);
         else
-            return (8);
+            return (5);
     }
 
     private String get_heuristic(RadioButton manhattan, RadioButton hamming, RadioButton manhattan_hamming)

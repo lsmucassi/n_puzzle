@@ -52,40 +52,34 @@ public class MapUtils
                 while ((line = br.readLine()) != null)
                 {
                     line = line.trim();
-                    if (is_end_dollar(line))
+                    if (is_comment(line))
+                        continue ;
+                    line = cut_comment_off(line);
+                    if (isNumeric(line))
                     {
-                        if (is_comment(line))
-                            continue ;
-                        line = cut_dollar_off(line);
-                        line = cut_comment_off(line);
-                        if (isNumeric(line))
-                        {
-                            if (size > 0)
-                                return (false);
-                            size = Integer.parseInt(line);
-                            if (size < 2)
-                                return (false);
-                        }
-                        else
-                        {
-                            lines++;
-                            if (size > 0 && lines <= size)
-                            {
-                                String[] items = line.split("\\s+");
-                                if (items.length != size)
-                                    return (false);
-                                for (String str : items)
-                                {
-                                    if (isNumeric(str) == false)
-                                        return (false);
-                                }
-                            }
-                            else
-                                return (false);
-                        }
+                        if (size > 0)
+                            return (false);
+                        size = Integer.parseInt(line);
+                        if (size < 2)
+                            return (false);
                     }
                     else
-                        return (false);
+                    {
+                        lines++;
+                        if (size > 0 && lines <= size)
+                        {
+                            String[] items = line.split("\\s+");
+                            if (items.length != size)
+                                return (false);
+                            for (String str : items)
+                            {
+                                if (isNumeric(str) == false)
+                                    return (false);
+                            }
+                        }
+                        else
+                            return (false);
+                    }
                 }
                 return (true);
             }
@@ -108,18 +102,6 @@ public class MapUtils
             return true;
         else
             return false;
-    }
-
-    public static boolean is_end_dollar(String line)
-    {
-        if (line.charAt(line.length() -1) == '$')
-            return  (true);
-        return (false);
-    }
-
-    public static  String cut_dollar_off(String line)
-    {
-        return line.substring(0,line.length() - 1);
     }
 
     public static  String cut_comment_off(String line)

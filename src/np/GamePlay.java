@@ -1,5 +1,8 @@
 package np;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -8,13 +11,13 @@ import java.util.Stack;
 
 public class GamePlay
 {
-    public static int speed = 3000, space, time;
-    public static Stack<State> all_moves = new Stack<>();
+    public static int space , time;
+    public static Stack<State> all_moves, closed;
     public static File map = null;
     public static boolean solvable;
 
 
-    public static void play(int size, String heuristic)
+    public static void play(int size, String heuristic, Label lbl_solve, GridPane grid)
     {
         State goal_state, current_state = null;
         if (map != null)
@@ -28,17 +31,19 @@ public class GamePlay
             current_state = new State(size);
         goal_state = get_goal_state(current_state.get_size());
         current_state.set_heuristic(heuristic);
-        solvable = !MapUtils.isSolvable(current_state);
+        solvable = !MapUtils.isSolvable(current_state);;
         if (solvable)
         {
+            all_moves = new Stack<>();
+            closed = new Stack<>();
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0L;
             System.out.println("\u001B[32m" + "Searching for optimal sequence..." + "\u001B[0m" +"\n");
             IDA(current_state, goal_state);
             elapsedTime = (new Date()).getTime() - startTime;
             System.out.println("\ntime in seconds : " + elapsedTime/1000.0);
-            System.out.println("space complexity : " + space);
             System.out.println("time complexity : " + time);
+            System.out.println("space complexity : " + space);
             System.out.println("number of moves : " + (all_moves.size() - 1));
             for (State p : all_moves) {
                 System.out.println("\n");
@@ -48,9 +53,15 @@ public class GamePlay
         else
         {
             System.out.println("This Map is unsolvable\n");
+
+            lbl_solve.setVisible(true);
             Utils.print(current_state);
+            grid.setVisible(false);
+            grid.setDisable(true);
+            try { Thread.sleep(2000);}
+            catch (Exception ex){}
+            System.exit(0);
         }
-        //System.exit(0);
     }
 
     private static void IDA(State start, State goal)
@@ -58,16 +69,17 @@ public class GamePlay
         int threshold, result, found = -1;
 
         threshold = start.get_fscore();
-        all_moves.push(start);
-        space = 1;
+
         time = 0;
+        space = 1;
         while(true)
         {
+            all_moves.push(start);
             result = search(goal, threshold);
-
-             if(result == found)
+            if(result == found)
                 break;
             threshold = result;
+            all_moves.clear();
         }
 
     }
@@ -95,7 +107,7 @@ public class GamePlay
                     return (-1);
                 if (result < min)
                     min = result;
-                all_moves.pop();
+                closed.push(all_moves.pop());
                 time++;
             }
         }
