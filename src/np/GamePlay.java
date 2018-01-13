@@ -17,7 +17,7 @@ public class GamePlay
     public static boolean solvable;
 
 
-    public static void play(int size, String heuristic, Label lbl_solve, GridPane grid)
+    public static void play(int size, String heuristic, GridPane grid)
     {
         State goal_state, current_state = null;
         if (map != null)
@@ -45,6 +45,7 @@ public class GamePlay
             System.out.println("time complexity : " + time);
             System.out.println("space complexity : " + space);
             System.out.println("number of moves : " + (all_moves.size() - 1));
+            System.out.println("Selected heuristic : " + current_state.get_heuristic() + " | value : " +current_state.getHeuristic_value());
             for (State p : all_moves) {
                 System.out.println("\n");
                 Utils.print(p);
@@ -53,8 +54,6 @@ public class GamePlay
         else
         {
             System.out.println("This Map is unsolvable\n");
-
-            lbl_solve.setVisible(true);
             Utils.print(current_state);
             grid.setVisible(false);
             grid.setDisable(true);

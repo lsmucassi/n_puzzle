@@ -159,6 +159,11 @@ public class State
         set_heuristic_value();
     }
 
+    public int getHeuristic_value()
+    {
+        return (heuristic_value);
+    }
+
     private void set_heuristic_value()
      {
          if (heuristic.equals("Manhattan"))

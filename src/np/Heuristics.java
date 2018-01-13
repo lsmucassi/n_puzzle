@@ -30,8 +30,10 @@ public class Heuristics
         {
             for (int j = 0; j < game.get_size(); j++)
             {
-                if (!Utils.is_in_place(game.get_grid()[i][j], game))
-                    value += 1;
+                if (game.get_grid()[i][j] != 0) {
+                    if (!Utils.is_in_place(game.get_grid()[i][j], game))
+                        value += 1;
+                }
             }
         }
         return (value);
@@ -49,10 +51,11 @@ public class Heuristics
                 Point two = Utils.get_ideal_coords(game.get_grid()[i][j], game.get_size());
                 if (game.get_grid()[i][j] != 0)
                 {
-                    value += Utils.get_distance(one, two);//(one.y != two.y) ? 1 : 0;
-                   // value += (one.x != two.x) ? 1 : 0;
-                    if (Utils.is_in_place(game.get_grid()[i][j], game) == false)
-                        value += 1;
+                    value += Utils.get_distance(one, two);
+                    if (Utils.is_in_place(game.get_grid()[i][j], game) == false) {
+                        if (!(one.x == two.x || one.y == two.y))
+                            value += 1;
+                    }
                 }
             }
         }

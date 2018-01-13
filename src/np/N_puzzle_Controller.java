@@ -23,9 +23,6 @@ public class N_puzzle_Controller implements Initializable
     int display_index;
 
     @FXML
-    private Label unsolvable;
-
-    @FXML
     private TextField filename;
 
     @FXML
@@ -70,9 +67,8 @@ public class N_puzzle_Controller implements Initializable
         display_index = 0;
         int size = get_size(three, four);
         String heuristic  = get_heuristic(Manhattan, Hamming, Manhattan_Hamming);
-        unsolvable.setVisible(false);
         grid.setVisible(false);
-        GamePlay.play(size, heuristic, unsolvable, grid);
+        GamePlay.play(size, heuristic, grid);
         if (GamePlay.solvable) {
             State move = GamePlay.all_moves.get(display_index++);
             grid.setLayoutX(100);
@@ -162,7 +158,7 @@ public class N_puzzle_Controller implements Initializable
                 String spacing = new String(new char[spaces]).replace('\0', ' ');
                 text.setText(spacing + Integer.toString(state.get_grid()[i][j]));
                 Rectangle rec = new Rectangle(block, block);
-                if (state.get_grid()[i][j] ==0)
+                if (state.get_grid()[i][j] == 0)
                     rec.setFill(Color.TRANSPARENT);
                 else
                 {

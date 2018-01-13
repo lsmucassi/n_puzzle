@@ -81,6 +81,8 @@ public class MapUtils
                             return (false);
                     }
                 }
+                if (lines != size)
+                    return (false);
                 return (true);
             }
             else
