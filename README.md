@@ -2,7 +2,7 @@
 
 ### History
 
-N-Puzzle is based on the AI-Search Java applet developed at RMIT University by Vic Ciesielski, James Harland and Peter McDonald.
+> N-Puzzle is based on the AI-Search Java applet developed at RMIT University by Vic Ciesielski, James Harland and Peter McDonald.
 The original applet can found at: http://www.cs.rmit.edu.au/AI-Search/
 
 ### License
