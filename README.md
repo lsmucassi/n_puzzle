@@ -6,7 +6,7 @@
 The original applet can found at: http://www.cs.rmit.edu.au/AI-Search/
 
 ### License
-N-Puzzle is distributed under the Simplified BSD License. See the LICENSE file for more information.
+> N-Puzzle is distributed under the Simplified BSD License. See the LICENSE file for more information.
 
 # Overview
 N-Puzzle is a program for learning about graph-based search algorithms.
